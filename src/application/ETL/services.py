@@ -1,31 +1,20 @@
 import json
 from typing import Optional
 
-import aiohttp
 from pydantic import dataclasses
 from pydantic.error_wrappers import ValidationError
-from sqlalchemy.orm import session
+from application.interfaces import DB, SourceApi
 
 
 class ETL:
     def __init__(
-            self, session_db: session, source_api, auth_api: str, dto: dataclasses.dataclass, model, page_size: int
+            self, db: DB, source_api: SourceApi, dto: dataclasses.dataclass
     ):
-        self.session_db = session_db
+        self.db = db
         self.source_api = source_api
-        self.auth_api = auth_api
         self.dto = dto
         self.report: str = ""
-        self.model = model
-        self.page_size = page_size
 
-    async def extract(self):
-        headers = {'Authorization': f'Bearer {self.auth_api}'}
-        url = self.source_api + f"?page_size={self.page_size}"
-
-        async with aiohttp.ClientSession() as session:
-            response = await session.get(url=url, headers=headers)
-            return await response.text()
 
     async def transform(self, data: str) -> list[dataclasses.dataclass]:
         json_data = json.loads(data)
@@ -55,20 +44,31 @@ class ETL:
 
         return model_instances
 
-    async def load(self, instances: list):
-        # is_success = True
-        try:
-            self.session_db.add_all(instances)
-            self.session_db.commit()
-        # TODO: change exceptions
-        except Exception as e:
-            self.report += f"{e} \n"
-            return f"Some issues was occured: \n {self.report}"
-
-        return f"All datas was completely loads: \n {self.report}"
 
     async def process(self):
-        json_datas = await self.extract()
+        json_datas = await self.source_api.get()
         models_instances = await self.transform(json_datas)
-        result = await self.load(models_instances)
+        result = await self.db.save()
         return result
+
+
+
+# EXTRACT
+#         headers = {'Authorization': f'Bearer {self.auth_api}'}
+#         url = self.source_api + f"?page_size={self.page_size}"
+#
+#         async with aiohttp.ClientSession() as session:
+#             response = await session.get(url=url, headers=headers)
+#             return await response.text()
+
+
+# LOAD
+#         try:
+#             self.session_db.add_all(instances)
+#             self.session_db.commit()
+#         # TODO: change exceptions
+#         except Exception as e:
+#             self.report += f"{e} \n"
+#             return f"Some issues was occured: \n {self.report}"
+#
+#         return f"All datas was completely loads: \n {self.report}"
