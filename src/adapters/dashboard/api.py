@@ -1,18 +1,18 @@
-from fastapi import APIRouter, Depends
+from fastapi import FastAPI
 
 from application.ETL.dto import BookDTO
 from application.ETL.services import ETL
-from application.interfaces import BookRepository
-from composites.utils import get_db, get_etl
-
-dashboard = APIRouter(prefix='/dashboard', tags=['dashboard'])
 
 
-@dashboard.get('/', response_model=None, status_code=200)
-async def get_list(db: BookRepository = Depends(get_db), etl: ETL = Depends(get_etl)):
+def get_app(etl: ETL) -> FastAPI:
+    async def get_list():
+        if await etl.process():
+            print('data was successfully uploaded!')
+        else:
+            print('exceptions occurred!')
+        data = await etl.repository.get_all()
+        return BookDTO.get_all(data)
 
-    if await etl.process():
-        print('data was successfully uploaded!')
-    else:
-        print('exceptions occurred!')
-    return BookDTO.get_all(await db.get_all())
+    app = FastAPI()
+    app.add_api_route('/dashboard', endpoint=get_list)
+    return app
