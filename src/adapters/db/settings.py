@@ -13,11 +13,11 @@ class DBSettings(BaseSettings):
     POSTGRES_PASSWORD: str
     POSTGRES_HOST: str
     POSTGRES_PORT: str
-    POSTGRES_PATH: str = ''
+    DATABASE_NAME: str = ''
     db_url: str | None
 
     class Config:
-        env_file = str(PATH_BASE.parent / '.env')
+        env_file = f"{PATH_BASE.parent}/.env"
 
     @validator('db_url', pre=True)
     def assemble_db_connection(cls, v: Optional[str], values: dict[str, Any]) -> str:  # noqa
@@ -29,7 +29,7 @@ class DBSettings(BaseSettings):
             password=values.get('POSTGRES_PASSWORD'),
             host=values.get('POSTGRES_HOST'),
             port=values.get('POSTGRES_PORT'),
-            path=f"/{values.get('POSTGRES_PATH')}",
+            path=f"/{values.get('DATABASE_NAME')}",
         )
 
 
