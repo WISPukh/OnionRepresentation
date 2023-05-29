@@ -1,4 +1,4 @@
-import logging
+import logging.config
 
 import uvicorn
 from fastapi import FastAPI
@@ -11,16 +11,9 @@ from adapters.source_api.repositories import SourceApi
 from adapters.source_api.settings import settings as api_settings
 from application.ETL.services import ETL
 from composites.database.postgres_db import SessionLocal
-from composites.settings_app import settings as app_settings
-
-logging.basicConfig(
-    format='%(pathname)s\n%(asctime)s LINE NUMBER - %(lineno)d: FUNCTION - %(funcName)s \n %(message)s\n',
-    datefmt='(%I:%M:%S %p)',
-    filename='errors.log',
-    encoding='utf-8',
-    level=logging.ERROR
-)
-logger = logging.Logger('main_logger')
+from composites.settings_app import settings as app_settings, LOGGING_CONFIG
+from exception_handlers import handle_exceptions
+from exceptions import BaseError
 
 
 async def get_repo(session: AsyncSession) -> BookRepository:
@@ -35,11 +28,12 @@ async def get_etl(repository: BookRepository, source_api: SourceApi):
     return ETL(repository, source_api)
 
 
-async def get_connection(func):
-    return await anext(func)
+logging.config.dictConfig(LOGGING_CONFIG)
 
+app = FastAPI()
 
-app = FastAPI(debug=True)
+if not app_settings.DEBUG:
+    app.add_exception_handler(BaseError, handle_exceptions)
 
 
 @app.on_event('startup')
@@ -58,7 +52,7 @@ async def root():
 
 if __name__ == '__main__':
     uvicorn.run(
-        'utils:app',
+        'app:app',
         reload_dirs='..',
         reload=True,
         port=app_settings.SERVER_PORT,

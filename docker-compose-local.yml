@@ -29,8 +29,5 @@ services:
     command: ./entrypoint.sh
 
 
-networks:
-  onion_books:
-
 volumes:
   onion_volume: {}
