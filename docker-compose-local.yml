@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+
+  onion_db:
+    container_name: onion_db
+    restart: always
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: onion_representation
+      POSTGRES_USER: onion
+      POSTGRES_PASSWORD: onion
+      POSTGRES_PORT: 5432
+    volumes:
+      - onion_volume:/var/lib/postgresql/data
+
+  project:
+    container_name: onion
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    env_file:
+      - .env
+    depends_on:
+      - onion_db
+    ports:
+      - "8004:8004"
+    command: ./entrypoint.sh
+
+
+networks:
+  onion_books:
+
+volumes:
+  onion_volume: {}
