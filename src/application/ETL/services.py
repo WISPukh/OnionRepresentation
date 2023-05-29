@@ -26,5 +26,5 @@ class ETL:
 
     async def process(self):
         json_datas = await self.source_api.get()
-        model_instances = self._transform(json_datas)
-        return await self.repository.save(model_instances)
+        dto_instances = self._transform(json_datas)
+        return await self.repository.save(dto_instances)
