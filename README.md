@@ -83,10 +83,22 @@ docker-compose -f docker-compose-local.yml stop
 docker-compose -f docker-compose-local.yml down
 ```
 
+* Upgrade to latest migration
+	
+```bash
+docker exec -it onion alembic upgrade head
+```
+
+* Show logs for container
+
+```bash
+docker logs onion -f
+```
+
 * Delete all docker data for this project
 
 ```bash
-docker rm onion onion_db
+docker rm -f onion onion_db
 docker image rm onionrepresentation-project
 docker volume rm onionrepresentation_onion_volume
 docker network rm onionrepresentation_default
