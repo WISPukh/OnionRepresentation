@@ -22,7 +22,7 @@ class SourceApi(BaseSourceApi):
     async def _make_request(
             url: str,
             method: ALLOWED_METHODS,
-            /,
+            *,
             payload: dict | None = None,
             headers: dict | None = None
     ) -> str | NoReturn:
