@@ -1,7 +1,6 @@
 import logging
 from typing import Type, Any, Sequence
 
-from sqlalchemy import Row, RowMapping
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.sql import select, delete
@@ -16,7 +15,7 @@ class BookRepository(BaseDB):
         self.session_db = session_db
         self.model = model
 
-    async def get_all(self) -> Sequence[Row | RowMapping | Any]:
+    async def get_all(self) -> Sequence[Any]:
         return (await self.session_db.execute(select(self.model))).scalars().all()
 
     def _dto_to_model(self, instances: list) -> list[BookDTO]:
