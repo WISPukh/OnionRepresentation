@@ -2,8 +2,8 @@ from typing import Optional, Callable
 
 from adapters.scheduler.decorators import catch_exceptions
 from exceptions import InternalServerError
+import logging.config
 
-logging.config.dictConfig(LOGGING_CONFIG)
 info_logger = logging.getLogger('info_logger')
 
 
