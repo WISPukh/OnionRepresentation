@@ -24,7 +24,7 @@ async def get_source_api(page_size: int = 100, is_jwt: bool = True) -> SourceApi
     return SourceApi(page_size, is_jwt)
 
 
-async def get_etl(repository: BookRepository, source_api: SourceApi):
+async def get_etl(repository: BookRepository, source_api: SourceApi) -> ETL:
     return ETL(repository, source_api)
 
 
