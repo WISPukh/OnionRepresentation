@@ -4,7 +4,6 @@ services:
 
   onion_db:
     container_name: onion_db
-    restart: always
     image: postgres:latest
     environment:
       POSTGRES_DB: onion_representation
