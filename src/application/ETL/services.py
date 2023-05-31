@@ -5,6 +5,7 @@ from pydantic.error_wrappers import ValidationError
 
 from application.ETL.dto import BookDTO
 from application.interfaces import BookRepository, SourceApi
+from exceptions import InternalServerError
 
 
 class ETL:
@@ -20,11 +21,12 @@ class ETL:
         for item in res:
             try:
                 dto_instances.append(BookDTO(**item))  # noqa
-            except ValidationError as exc:
+            except (TypeError, ValidationError) as exc:
                 logging.error(exc)
+                raise InternalServerError('Ошибка преобразования в DTO')
         return dto_instances
 
     async def process(self):
         json_datas = await self.source_api.get()
-        model_instances = self._transform(json_datas)
-        return await self.repository.save(model_instances)
+        dto_instances = self._transform(json_datas)
+        return await self.repository.save(dto_instances)

@@ -1,18 +1,16 @@
+import logging.config
+
+
 from fastapi import FastAPI
 
 from application.ETL.dto import BookDTO
 from application.ETL.services import ETL
 
+info_logger = logging.getLogger('info_logger')
 
-def get_app(etl: ETL) -> FastAPI:
+
+def configure_app(app: FastAPI, etl: ETL) -> None:
+
+    @app.get('/dashboard', status_code=200, response_model=list[BookDTO])
     async def get_list():
-        if await etl.process():
-            print('data was successfully uploaded!')
-        else:
-            print('exceptions occurred!')
-        data = await etl.repository.get_all()
-        return BookDTO.get_all(data)
-
-    app = FastAPI()
-    app.add_api_route('/dashboard', endpoint=get_list)
-    return app
+        return await etl.repository.get_all()
