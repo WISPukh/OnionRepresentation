@@ -1,6 +1,5 @@
 from typing import Optional, Callable
 
-from adapters.scheduler.decorators import catch_exceptions
 from exceptions import InternalServerError
 import logging.config
 
@@ -22,11 +21,10 @@ class Scheduler:
         if not cls.instance:
             if not task:
                 raise InternalServerError("Отсутствует ссылка на задачу исполняемую задачу")
-            cls.instance = Scheduler(task)
+            cls.instance = cls(task)
             return cls.instance
         return cls.instance
 
-    # @catch_exceptions(cancel_on_failure=True)
     async def execute(self):
         task = self.task
         if await task():

@@ -8,8 +8,8 @@ from starlette.background import BackgroundTask
 
 from adapters.dashboard import api
 from adapters.db.models import Book
-from adapters.scheduler.repositories import Scheduler
 from adapters.db.repositories import BookRepository
+from adapters.scheduler.repositories import Scheduler
 from adapters.scheduler.settings import settings as scheduler_settings
 from adapters.source_api.repositories import SourceApi
 from adapters.source_api.settings import settings as api_settings
@@ -21,8 +21,6 @@ from exceptions import BaseError
 
 logging.config.dictConfig(LOGGING_CONFIG)
 info_logger = logging.getLogger('info_logger')
-
-error_logger = logging.getLogger()
 
 
 async def get_repo(session: AsyncSession) -> BookRepository:
@@ -37,15 +35,10 @@ async def get_etl(repository: BookRepository, source_api: SourceApi) -> ETL:
     return ETL(repository, source_api)
 
 
-def get_cron() -> int:
-    key, value = scheduler_settings.dict(exclude_unset=True).popitem()
-    return value
-
-
-@repeat_every(seconds=get_cron(), logger=error_logger)
+@repeat_every(seconds=scheduler_settings.CRON_SECOND, logger=logging.getLogger())
 async def call_process():
     scheduler = Scheduler.get_instance()
-    info_logger.info(f"Task {scheduler.task} start")
+    info_logger.info(f"Task {scheduler.task.__qualname__} started!")
     await scheduler.execute()
 
 

@@ -15,14 +15,14 @@ services:
 
   project:
     container_name: onion
+    depends_on:
+      - onion_db
     build:
       context: .
       dockerfile: Dockerfile
     restart: always
     env_file:
       - .env
-    depends_on:
-      - onion_db
     ports:
       - "8004:8004"
     command: ./entrypoint.sh
