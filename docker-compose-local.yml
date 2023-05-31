@@ -21,6 +21,7 @@ services:
       context: .
       dockerfile: Dockerfile
     restart: always
+    platform: linux/amd64
     env_file:
       - .env
     ports:
