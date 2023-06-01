@@ -1,0 +1,36 @@
+[tool.isort]
+profile = "black"
+known_first_party = "onion_application"
+sections=["FUTURE", "STDLIB", "THIRDPARTY", "FIRSTPARTY", "LOCALFOLDER"]
+line_length = 80
+
+[tool.yapf]
+based_on_style = "pep8"
+spaces_before_comment = 4
+column_limit = 120
+allow_split_before_dict_value = false
+dedent_closing_brackets = true
+split_complex_comprehension = true
+split_arguments_when_comma_terminated = true
+blank_line_before_nested_class_or_def = true
+
+split_before_dict_set_generator = true
+split_before_first_argument = true
+split_before_arithmetic_operator = true
+split_before_logical_operator = true
+split_before_bitwise_operator = true
+
+[tool.flake8]
+max-line-length = 80
+select = ['F', 'E', 'W', ]
+
+ignore = ['W503', ]
+
+per-file-ignores = [
+    '*/adapters/*/repositories.py:E711,E712',
+    '*/adapters/*/repositories/*:E711,E712',
+    '*/migrations/*:E711,E712',
+    '*/alembic/versions/*:E711,E712',
+    '__init__.py:F401',
+]
+count = true

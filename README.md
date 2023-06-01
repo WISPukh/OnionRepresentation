@@ -104,11 +104,3 @@ docker volume rm onionrepresentation_onion_volume
 docker network rm onionrepresentation_default
 docker system prune -f
 ```
-
----
-
-## Prod.by
-
-+ [Pukhov Oleg :trollface: :exploding_head: :octocat:](https://t.me/JustFinn363)
-
-+ [Boyushenko Aleksandr :shipit: :call_me_hand: :man_technologist:](https://t.me/SandrSX)
