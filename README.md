@@ -24,6 +24,12 @@ cd OnionRepresentation
 cp .env.example .env
 ```
 
+* Navigate to deployment directory
+
+```bash
+cd deployment
+```
+
 * The following command will start project in docker containers:
 
 ```bash
@@ -50,6 +56,8 @@ make help
 
 
 # Troubleshooting
+
+### If you got 
 
 ### If for some reason you don't have make installed here are all commands, just copy and paste them.
 

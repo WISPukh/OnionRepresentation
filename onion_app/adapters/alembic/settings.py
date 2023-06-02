@@ -1,4 +1,8 @@
+from pathlib import Path
+
 from pydantic import BaseSettings
+
+PATH_BASE = Path(__file__).parent.parent.parent
 
 
 class Settings(BaseSettings):
@@ -15,3 +19,4 @@ class Settings(BaseSettings):
 
     class Config:
         env_file_encoding = 'utf-8'
+        env_file = f"{PATH_BASE.parent}/.env"

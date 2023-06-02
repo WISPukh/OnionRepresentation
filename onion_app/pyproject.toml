@@ -2,7 +2,7 @@
 profile = "black"
 known_first_party = "onion_application"
 sections=["FUTURE", "STDLIB", "THIRDPARTY", "FIRSTPARTY", "LOCALFOLDER"]
-line_length = 80
+line_length = 120
 
 [tool.yapf]
 based_on_style = "pep8"

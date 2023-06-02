@@ -27,7 +27,7 @@ logs:			## Show logs for container
 
 clear_docker:   ## Delete all docker data for this project
 	docker rm -f onion onion_db
-	docker image rm onionrepresentation-project
-	docker volume rm onionrepresentation_onion_volume
-	docker network rm onionrepresentation_default
+	docker image rm deployment-project
+	docker volume rm deployment_onion_volume
+	docker network rm deployment_default
 	docker system prune -f

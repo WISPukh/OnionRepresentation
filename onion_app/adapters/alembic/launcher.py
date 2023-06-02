@@ -7,7 +7,7 @@ from alembic.config import CommandLine, Config
 
 class Runner:
 
-    def __int__(
+    def __init__(
         self,
         settings: Callable,
         db_settings: Callable,
@@ -48,7 +48,7 @@ class Runner:
         config.set_main_option('timezone', 'UTC')
         config.set_main_option(
             'sqlalchemy.url',
-            db_settings.DATABASE_URL,
+            db_settings.db_url,
         )
         config.set_main_option(
             'script_location',

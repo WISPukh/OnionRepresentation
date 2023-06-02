@@ -4,6 +4,7 @@ import uvicorn
 from fastapi import FastAPI
 from fastapi_utils.tasks import repeat_every
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
+from sqlalchemy.orm import sessionmaker
 from starlette.background import BackgroundTask
 
 from onion_app.adapters.api.controllers import configure_app
@@ -26,7 +27,7 @@ info_logger = logging.getLogger('info_logger')
 
 class DB:
     engine = create_async_engine(db_settings.db_url, pool_pre_ping=True)
-    SessionLocal = sessionmaker(bind=engine, class_=AsyncSession, expire_on_commit=False)  # noqa
+    SessionLocal = sessionmaker(bind=engine, class_=AsyncSession, expire_on_commit=False)
 
 
 async def get_book_repo(session: AsyncSession) -> BookRepository:
@@ -76,7 +77,7 @@ async def setup():
 if __name__ == '__main__':
     uvicorn.run(
         'app:app',
-        reload_dirs='..',
+        reload_dirs=api_settings.RELOAD_DIRS,
         reload=True,
         port=api_settings.SERVER_PORT,
         host=api_settings.SERVER_HOST

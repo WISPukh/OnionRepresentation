@@ -10,6 +10,7 @@ class Settings(BaseSettings):
     SERVER_PORT: int
     SERVER_HOST: str
     DEBUG: bool
+    RELOAD_DIRS: str
 
     class Config:
         env_file = f"{PATH_BASE.parent}/.env"
