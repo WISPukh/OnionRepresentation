@@ -11,11 +11,11 @@ services:
       POSTGRES_PASSWORD: onion
       POSTGRES_PORT: 5432
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready", "-U", "onion", "-d", "onion_representation" ]
+      test: [ "CMD-SHELL", "pg_isready -U onion -d onion_representation" ]
       interval: 5s
-      timeout: 60s
+      timeout: 5s
       retries: 5
-      start_period: 80s
+      start_period: 10s
     volumes:
       - onion_volume:/var/lib/postgresql/data
 
@@ -27,13 +27,11 @@ services:
     build:
       context: ../
       dockerfile: deployment/Dockerfile
-#    restart: always
     platform: linux/amd64
     env_file:
       - ../.env
     ports:
       - "8004:8004"
-#    command: ./entrypoint.sh
     entrypoint: ./entrypoint.sh
 
 
