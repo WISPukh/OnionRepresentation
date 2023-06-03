@@ -24,6 +24,12 @@ cd OnionRepresentation
 cp .env.example .env
 ```
 
+* Navigate to deployment directory
+
+```bash
+cd deployment
+```
+
 * The following command will start project in docker containers:
 
 ```bash
@@ -50,6 +56,8 @@ make help
 
 
 # Troubleshooting
+
+### If you got 
 
 ### If for some reason you don't have make installed here are all commands, just copy and paste them.
 
@@ -104,11 +112,3 @@ docker volume rm onionrepresentation_onion_volume
 docker network rm onionrepresentation_default
 docker system prune -f
 ```
-
----
-
-## Prod.by
-
-+ [Pukhov Oleg :trollface: :exploding_head: :octocat:](https://t.me/JustFinn363)
-
-+ [Boyushenko Aleksandr :shipit: :call_me_hand: :man_technologist:](https://t.me/SandrSX)

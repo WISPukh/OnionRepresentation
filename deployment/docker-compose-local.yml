@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+
+  onion_db:
+    container_name: onion_db
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: onion_representation
+      POSTGRES_USER: onion
+      POSTGRES_PASSWORD: onion
+      POSTGRES_PORT: 5432
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U onion -d onion_representation" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    volumes:
+      - onion_volume:/var/lib/postgresql/data
+
+  project:
+    container_name: onion
+    depends_on:
+      onion_db:
+        condition: service_healthy
+    build:
+      context: ../
+      dockerfile: deployment/Dockerfile
+    platform: linux/amd64
+    env_file:
+      - ../.env
+    ports:
+      - "8004:8004"
+    entrypoint: ./entrypoint.sh
+
+
+volumes:
+  onion_volume: {}
